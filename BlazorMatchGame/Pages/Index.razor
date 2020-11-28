@@ -13,10 +13,13 @@
 </style>
 <div class="container">
     <div class="row">
-        @foreach(var animal in shuffledAnimals)
+        @for(var animalNumber = 0; animalNumber < shuffledAnimals.Count; animalNumber++)
         {
+            var animal = shuffledAnimals[animalNumber];
+            var uniqueDescription = $"Button #{animalNumber}";
+
             <div class="col-3">
-                <button @onclick="@(() => ButtonClick(animal))"
+                <button @onclick="@(() => ButtonClick(animal, uniqueDescription))"
                         type="button" class="btn btn-outline-dark">
                     <h1>@animal</h1>
                 </button>
@@ -54,15 +57,17 @@
     }
 
     string lastAnimalFound = string.Empty;
+    string lastDescription = string.Empty;
 
-    private void ButtonClick(string animal)
+    private void ButtonClick(string animal, string animalDescription)
     {
         if (lastAnimalFound == string.Empty)
         {
             // First selection of the pari.  Remember it
             lastAnimalFound = animal;
+            lastDescription = animalDescription;
         }
-        else if (lastAnimalFound == animal)
+        else if ((lastAnimalFound == animal) &&(animalDescription != lastDescription))
         {
             // Match found! Reset for the next pair.
             lastAnimalFound = string.Empty;
@@ -76,6 +81,7 @@
             // User selected a pair that doesn't match.
             // Reset selection.
             lastAnimalFound = string.Empty;
+            lastDescription = string.Empty;
         }
     }
 }
